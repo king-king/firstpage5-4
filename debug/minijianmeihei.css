@@ -1,0 +1,10 @@
+@font-face {
+font-family: 'minijianmeihei434841';
+src: url('minijianmeihei.eot');
+src: url('minijianmeihei.eot?#iefix') format('embedded-opentype'),
+     url('minijianmeihei.woff') format('woff'),
+     url('minijianmeihei.ttf') format('truetype'),
+     url('minijianmeihei.svg#minijianmeihei') format('svg');
+    font-weight: normal;
+    font-style: normal;
+   }

@@ -1,0 +1,10 @@
+@font-face {
+font-family: 'ljsh433241';
+src: url('ljsh.eot');
+src: url('ljsh.eot?#iefix') format('embedded-opentype'),
+     url('ljsh.woff') format('woff'),
+     url('ljsh.ttf') format('truetype'),
+     url('ljsh.svg#ljsh') format('svg');
+    font-weight: normal;
+    font-style: normal;
+   }

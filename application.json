@@ -1,0 +1,8 @@
+{
+	"css": [
+		"common.css"
+	],
+	"js": [
+		"layout/*.js"
+	]
+}

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="mobileoptimized" content="0"/>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="screen-orientation" content="portrait">
+    <title>举报</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            outline: none;
+            border: none;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            -webkit-text-size-adjust: none;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -webkit-appearance: none;
+        }
+
+        input, textarea {
+            -webkit-user-select: text;
+        }
+
+        body {
+            overflow: hidden;
+            background-color: #f0eff5;
+        }
+
+        .title-box {
+            height: 37px;
+            background-color: #f0eff5;
+            border-bottom: 1px #c8c7cc solid;
+        }
+
+        .title-box p {
+            line-height: 37px;
+            font-size: 14px;
+            margin-left: 15px;
+            color: #a7a9ac;
+        }
+
+        .context {
+            height: 194px;
+            background-color: #ffffff;
+            border-bottom: 1px #c8c7cc solid;
+        }
+
+        .option {
+            position: relative;
+            margin-left: 15px;
+            line-height: 38px;
+            border-bottom: 1px #c8c7cc solid;
+            overflow: hidden;
+        }
+
+        .option.selected .select-icon {
+            display: block;
+        }
+
+        .select-icon {
+            display: none;
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            width: 13px;
+        }
+
+        .text-box {
+            padding: 4px;
+            width: 100%;
+            height: 92px;
+            border-bottom: 1px #c8c7cc solid;
+            box-sizing: border-box;
+            resize: none;
+        }
+
+        .box {
+            position: relative;
+        }
+
+        .btn {
+            background-color: #04be02;
+            font-size: 14px;
+            line-height: 38px;
+            width: 90%;
+            margin-left: 5%;
+            color: #ffffff;
+            text-align: center;
+            border-radius: 4px;
+            margin-top: 30px;
+        }
+
+        .len {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 14px;
+            color: #c7c8c9;
+        }
+    </style>
+</head>
+<body>
+<div class="title-box">
+    <p>请选择举报原因</p>
+</div>
+<div class="context">
+    <div class="option">色情低俗<img src="report-selected.png" class="select-icon"></div>
+    <div class="option">广告骚扰<img src="report-selected.png" class="select-icon"></div>
+    <div class="option">政治敏感<img src="report-selected.png" class="select-icon"></div>
+    <div class="option">违法（暴力恐怖，违禁品）<img src="report-selected.png" class="select-icon"></div>
+    <div class="option">其他<img src="report-selected.png" class="select-icon"></div>
+</div>
+<div class="title-box">
+    <p>举报描述</p>
+</div>
+<div class="box">
+    <textarea class="text-box" maxlength="50"></textarea>
+    <div class="len"><span class="text-number">0</span>/50</div>
+</div>
+<div class="btn">
+    提交
+</div>
+<script>
+    !function () {
+        function encodeObject( obj ) {
+            var retVal = "", i = 0;
+            for ( var key in obj ) {
+                i++ && ( retVal += "&" );
+                retVal += encodeURIComponent( key );
+                retVal += '=';
+                retVal += encodeURIComponent( obj[key] );
+            }
+            return retVal;
+        }
+
+        function foreach( list, callback ) {
+            for ( var i = 0, len = list.length; i !== len; ++i ) {
+                callback( list[i], i );
+            }
+        }
+
+        function bind( el, eventName, response ) {
+            el.addEventListener( eventName, response );
+
+            return {
+                remove : function () {
+                    el.removeEventListener( eventName, response );
+                }
+            };
+        }
+
+        function onTap( el, response ) {
+            return bind( el, "touchstart", function () {
+                var trigHandle = bind( el, "touchend", function () {
+                    response && response();
+                } );
+                var endHandle = bind( document, "touchend", function () {
+                    trigHandle.remove();
+                    endHandle.remove();
+                } );
+            } );
+        }
+
+        var textBox = document.querySelector( ".text-box" );
+        var curSelected = null;
+        var reported = false;
+
+        bind( textBox, "input", function () {
+            document.querySelector( ".text-number" ).innerHTML = textBox.value.length;
+        } );
+
+        foreach( document.querySelectorAll( ".option" ), function ( option, i ) {
+            option.Type = i;
+            onTap( option, function () {
+                if ( curSelected ) {
+                    curSelected.classList.remove( "selected" );
+                }
+
+                curSelected = option;
+                curSelected.classList.add( "selected" );
+            } );
+        } );
+
+        onTap( document.querySelector( ".btn" ), function () {
+            if ( reported ) {
+                return;
+            }
+
+            if ( curSelected ) {
+                if ( !textBox.value ) {
+                    alert( "请填写举报描述" );
+                }
+                else {
+                    reported = true;
+
+                    var xhr = new XMLHttpRequest();
+                    xhr.open( "post", "/Feedback/FastFeedback", true );
+                    xhr.onload = function () {
+                        alert( "举报成功" );
+                        history.back();
+                    };
+                    xhr.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded" );
+                    xhr.send( encodeObject( {
+                        Type : curSelected.Type,
+                        Content : textBox.value,
+                        WorkID : parseInt( decodeURIComponent( location.hash.replace( "#", "" ) ) )
+                    } ) );
+                }
+            }
+            else {
+                alert( "请选择举报原因" );
+            }
+        } );
+    }();
+</script>
+</body>
+</html>

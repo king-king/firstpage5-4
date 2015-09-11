@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>字数精简</title>
+    <script src="../lib/zach/client.js"></script>
+</head>
+<body>
+<textarea></textarea>
+<button>转换</button>
+<script>
+    main( function () {
+        var ta = document.querySelector( "textarea" );
+        var String = imports( "string" );
+        var btn = document.querySelector( "button" );
+        var object = imports( "object" );
+
+        btn.onclick = function () {
+            var table = {};
+            String.foreach( ta.value, function ( ch ) {
+                table[ch] = true;
+            } );
+            ta.value = "";
+
+            object.foreach( table, function ( ch ) {
+                ta.value += ch;
+            } );
+        };
+
+    } );
+</script>
+</body>
+</html>

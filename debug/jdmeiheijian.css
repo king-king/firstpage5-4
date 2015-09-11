@@ -1,0 +1,10 @@
+@font-face {
+font-family: 'jdmeiheijian435804';
+src: url('jdmeiheijian.eot');
+src: url('jdmeiheijian.eot?#iefix') format('embedded-opentype'),
+     url('jdmeiheijian.woff') format('woff'),
+     url('jdmeiheijian.ttf') format('truetype'),
+     url('jdmeiheijian.svg#jdmeiheijian') format('svg');
+    font-weight: normal;
+    font-style: normal;
+   }

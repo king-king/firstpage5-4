@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>板式列表</title>
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+
+    <script src="../lib/zach/client.js"></script>
+</head>
+<body>
+<script>
+    main( function () {
+        var CanvasSystem = imports( "./canvas-system" );
+        var cc = CanvasSystem( main );
+        var LayoutList = imports( "./layout-list" );
+        var layoutList = LayoutList( cc );
+        var draw = imports( "canvas" );
+
+        function main( gc, point ) {
+            var area = layoutList.area( document.documentElement.clientWidth, document.documentElement.clientHeight );
+            if ( area ) {
+                draw( gc, area, point );
+            }
+        }
+    } );
+</script>
+</body>
+</html>
